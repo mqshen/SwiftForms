@@ -1,4 +1,10 @@
 
+[![Version](https://img.shields.io/badge/pod-1.5.1-orange.svg)](http://cocoadocs.org/docsets/SwiftForms)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
+[![License](https://img.shields.io/badge/license-MIT-gray.svg)](http://cocoadocs.org/docsets/SwiftForms)
+[![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](http://cocoadocs.org/docsets/SwiftForms)
+
 SwiftForms
 ==========
 
@@ -8,7 +14,7 @@ SwiftForms is a powerful and extremely flexible library written in Swift that al
 
 #####Here is an screenshot from an example application using SwiftForms
 
-![Screenshot of Example application](SwiftForms/Example.gif)
+![Screenshot of Example application](SwiftFormsApplication/Example.gif)
 
 How to create a form
 --------------------
@@ -18,23 +24,23 @@ Creating a form using SwiftForms is pretty straightforward. All you need is to d
 ```swift
 
 // Create form instace 
-let form = FormDescriptor()
+var form = FormDescriptor()
 form.title = "Example form"
 
 // Define first section
-let section1 = FormSectionDescriptor()
+var section1 = FormSectionDescriptor()
 
-var row: FormRowDescriptor! = FormRowDescriptor(tag: "name", rowType: .Email, title: "Email")
-section1.addRow(row)
+var row = FormRowDescriptor(tag: "name", rowType: .Email, title: "Email")
+section1.rows.append(row)
 
 row = FormRowDescriptor(tag: "pass", rowType: .Password, title: "Password")
-section1.addRow(row)
+section1.rows.append(row)
 
 // Define second section
-let section2 = FormSectionDescriptor()
+var section2 = FormSectionDescriptor()
 
 row = FormRowDescriptor(tag: "button", rowType: .Button, title: "Submit")
-section2.addRow(row)
+section2.rows.append(row)
 
 form.sections = [section1, section2]
 
@@ -45,10 +51,12 @@ To see a more complex form definition you can take a look to the example applica
 Cell appearance
 ----------------------
 
-Every row descriptor has a cellConfiguration dictionary which allows to customize cell appearance by defining its subviews property values using key-value coding.
+Every row descriptor has a `configuration` dictionary that allows to customize cell's appearance and behavior. In order to change concrete visual aspects of a row simply set `row.configuration.cell.appearance` value to a dictionary containing custom key-value coding properties.
+
+Here's an example:
 
 ```swift
-row.cellConfiguration = ["titleLabel.font" : UIFont.boldSystemFontOfSize(30.0), "segmentedControl.tintColor" : UIColor.redColor()]
+row.configuration.cell.appearance = ["titleLabel.font" : UIFont.boldSystemFontOfSize(30.0), "segmentedControl.tintColor" : UIColor.redColor()]
 ```
 
 Custom cells
@@ -80,16 +88,60 @@ Custom selector controllers
 
 In order to customize selector controller your class should conform to `FormSelector` protocol. That way you'll have access to the cell instance that pushed the controller, being able to alter its properties or setting it's row value accordingly to user interaction. 
 
-After defining your class, don't forget to set `FormRowDescriptor` selectorControllerClass property to use your custom selector controller.
+After defining your class, don't forget to set `row.configuration.selection.controllerClass` value in the configuration dictionary to use your custom selector controller.
 
 Requirements
 ---------------------
 
-* iOS 7.0 and above
+* iOS 8.0 and above
 
-Installation
----------------------
-Swift projects is currently not supported by Cocoapods. Until support is available you should just clone the repository and drag the source folder into your project to use SwiftForms. 
+## Installation
+
+> **Embedded frameworks require a minimum deployment target of iOS 8.**
+>
+> To use SwiftForms with a project targeting iOS 7, you must include all Swift files located inside the `SwiftForms` directory directly in your project.
+
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
+
+CocoaPods 0.36 adds supports for Swift and embedded frameworks. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+To integrate SwiftForms into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+use_frameworks!
+
+pod 'SwiftForms'
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+### Carthage
+
+Simply add the following line to your `Cartfile`:
+
+```
+github "ortuman/SwiftForms"
+```
+
+Then run:
+
+```bash
+$ carthage update
+```
+
+For more information on [Carthage](https://github.com/Carthage/Carthage) see the [README](https://github.com/Carthage/Carthage/blob/master/README.md)
 
 Copyright
 ---------
